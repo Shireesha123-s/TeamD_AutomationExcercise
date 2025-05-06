@@ -189,8 +189,8 @@ public class AfterSignUpButtonPOM {
         createAccountButton.click();
     }
     
-    public void verifyAccountCreation() {
-        accountCreated.isDisplayed();
+    public boolean verifyAccountCreation() {
+        return accountCreated.isDisplayed();
     }
     
     public void clickContinueButton() {

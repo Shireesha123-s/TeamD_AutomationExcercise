@@ -20,7 +20,7 @@ public class AutomationExerciseLoginPOM {
     @FindBy(xpath = "//button[@data-qa='login-button']")
     private WebElement loginButton;
 
-    @FindBy(xpath = "//p[contains(text(),'Your email or password is incorrect!')]")
+    @FindBy(xpath = "//p[text()='Your email or password is incorrect!']")
     private WebElement loginErrorMessage;
 
     // ========== New User Signup Section Elements ========== //
@@ -35,6 +35,9 @@ public class AutomationExerciseLoginPOM {
 
     @FindBy(xpath = "//button[@data-qa='signup-button']")
     private WebElement signupButton;
+    
+    @FindBy(xpath = "//p[text()='Email Address already exist!']")
+    private WebElement emailAlreadyExist;
 
     public AutomationExerciseLoginPOM(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -78,6 +81,11 @@ public class AutomationExerciseLoginPOM {
     public void enterSignupEmail(String email) {
         signupEmailField.clear();
         signupEmailField.sendKeys(email);
+    }
+    
+    public boolean emailAlreadyExist() {
+    	return emailAlreadyExist.isDisplayed();
+       
     }
 
     public void clickSignupButton() {
