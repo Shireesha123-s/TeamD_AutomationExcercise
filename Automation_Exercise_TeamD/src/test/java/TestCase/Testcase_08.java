@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import page_Repository.BlueTop;
 import page_Repository.HomePage;
 import page_Repository.ProductsPOM;
 
@@ -58,6 +59,12 @@ public class Testcase_08 {
         }
 
 // 9. Verify product details
+        BlueTop blueT = new BlueTop(driver);
+        
+        if(blueT.getBlueTop()) {
+        	System.out.println();
+        }
+        
         WebElement productName = driver.findElement(By.xpath("//h2[text()='Blue Top']"));
         System.out.println("Product Name: " + productName.getText());
         
