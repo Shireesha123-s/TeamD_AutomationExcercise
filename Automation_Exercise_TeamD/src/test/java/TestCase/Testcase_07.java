@@ -1,12 +1,16 @@
 package TestCase;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.Test;
+
+import page_Repository.HomePage;
+
 public class Testcase_07 {
-    public static void main(String[] args) {
+	@Test
+    public void main() {
 // 1. Launch browser
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -25,7 +29,9 @@ public class Testcase_07 {
         }
         
 // 4. Click on 'Test Cases' button
-        driver.findElement(By.xpath("//a[contains(text(),'Test Cases')]")).click();
+        HomePage hPage = new HomePage(driver);
+        
+        hPage.clickTestcase();
         System.out.println("Clicked on Test Cases button");
         
 // 5. Verify navigation to test cases page

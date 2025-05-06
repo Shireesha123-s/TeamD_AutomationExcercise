@@ -94,6 +94,14 @@ public class HomePage {
     @FindBy(xpath = "//a[text()='Continue']")
     private WebElement clickContinue;
     
+    //Test case
+    @FindBy(xpath = "//a[text()=' Test Cases']")
+    private WebElement testcaseLink;
+    
+    //Log out
+    @FindBy(xpath = "//a[text()=' Logout']")
+    private WebElement clickLogout;
+    
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -210,5 +218,13 @@ public class HomePage {
     
     public void clickContinueAfterDeletion() {
         clickContinue.click();
+    }
+    
+    public void clickLogoutOption() {
+        clickLogout.click();
+    }
+    
+    public void clickTestcase() {
+        testcaseLink.click();
     }
 }

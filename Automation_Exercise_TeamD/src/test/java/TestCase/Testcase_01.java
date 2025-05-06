@@ -1,5 +1,7 @@
 package TestCase;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -8,21 +10,14 @@ import org.testng.annotations.Test;
 import generic_Repository.BaseConfig;
 import page_Repository.AfterSignUpButtonPOM;
 import page_Repository.AutomationExerciseLoginPOM;
+import page_Repository.DeleteAccountPOM;
 import page_Repository.HomePage;
 
 public class Testcase_01 extends BaseConfig {
 @Test
 	public void main() {
-//// 1. Launch browser
-//        WebDriver driver = new ChromeDriver();
-//        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-//        
-//// 2. Navigate to url
-//        driver.get("http://automationexercise.com");
-        
-// 3. Verify that home page is visible successfully
-	
+	driver.manage().window().maximize();
+	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         String pageTitle = driver.getTitle();
         if(pageTitle.equalsIgnoreCase("Automation Exercise")) {
             System.out.println("Home page is visible successfully");
@@ -48,8 +43,8 @@ public class Testcase_01 extends BaseConfig {
 		}
         
 // 6. Enter name and email address
-        automationExercise.enterSignupName("Saktiman");
-        automationExercise.enterSignupEmail("saktiman@gmail.com");
+        automationExercise.enterSignupName("Saktimaan");
+        automationExercise.enterSignupEmail("saaktimaan@gmail.com");
 // 7. Click 'Signup' button
         automationExercise.clickSignupButton();
 // 8. Verify that 'ENTER ACCOUNT INFORMATION' is visible
@@ -85,56 +80,50 @@ public class Testcase_01 extends BaseConfig {
         asuB.enterAddress2("Apt 4B Hyd");
        
        // Country
-       Select country = new Select(driver.findElement(By.id("country")));
-       country.selectByValue("India");
+        asuB.selectCountry("India");
        
-       driver.findElement(By.id("state")).sendKeys("California");
-       driver.findElement(By.id("city")).sendKeys("Los Angeles");
-       driver.findElement(By.id("zipcode")).sendKeys("12345");
-       driver.findElement(By.id("mobile_number")).sendKeys("1234567890");
+        asuB.enterState("West bangal");
+        asuB.enterCity("Los Angeles");
+        asuB.enterZipcode("123456");
+        asuB.enterMobileNumber("1234567890");
        
 // 13. Click 'Create Account' button
-       driver.findElement(By.xpath("//button[contains(text(),'Create Account')]")).click();
-       
+        asuB.clickCreateAccount();
 // 14. Verify that 'ACCOUNT CREATED!' is visible
-       if(driver.findElement(By.xpath("//h2[@data-qa='account-created']")).isDisplayed()) {
-           System.out.println("'ACCOUNT CREATED!' is visible");
-       } else {
-           System.out.println("'ACCOUNT CREATED!' is not visible");
-           driver.quit();
-           return;
-       }
+        if(asuB.verifyAccountCreation()) {
+        	System.out.println("'ACCOUNT CREATED!' is visible");
+        }else {
+        	 System.out.println("'ACCOUNT CREATED!' is not visible");
+             driver.quit();
+        }
+// 15. Click 'Continue' button
+        asuB.clickContinueButton();
        
-       // 15. Click 'Continue' button
-       driver.findElement(By.xpath("//a[contains(text(),'Continue')]")).click();
+// 16. Verify that 'Logged in as username' is visible
+        if(hPage.isLoggedInAsUser()) {
+        	System.out.println("'Logged in as username' is visible");
+        }else {
+        	 System.out.println("'Logged in as username' is not visible");
+             driver.quit();
+        }
        
-       // 16. Verify that 'Logged in as username' is visible
-       if(driver.findElement(By.xpath("//a[contains(text(),'Logged in as')]")).isDisplayed()) {
-           System.out.println("'Logged in as username' is visible");
-       } else {
-           System.out.println("'Logged in as username' is not visible");
-           driver.quit();
-           return;
-       }
+// 17. Click 'Delete Account' button
+        hPage.clickOnDeleteAccount();
+// 18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button
+        DeleteAccountPOM deleteAP = new DeleteAccountPOM(driver);
+        
+        if(deleteAP.verifyAccountDeletion()) {
+        	System.out.println("'ACCOUNT DELETED!' is visible");
+        } else {
+        	System.out.println("'ACCOUNT DELETED!' is not visible");
+            driver.quit();
+		}
        
-       // 17. Click 'Delete Account' button
-       driver.findElement(By.xpath("//a[contains(text(),'Delete Account')]")).click();
+        // Click Continue button after account deletion
+        deleteAP.clickDeleteButton();
+        System.out.println("Complete signup and account deletion flow executed successfully");
        
-       // 18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button
-       if(driver.findElement(By.xpath("//h2[@data-qa='account-deleted']")).isDisplayed()) {
-           System.out.println("'ACCOUNT DELETED!' is visible");
-       } else {
-           System.out.println("'ACCOUNT DELETED!' is not visible");
-           driver.quit();
-           return;
-       }
-       
-       // Click Continue button after account deletion
-       driver.findElement(By.xpath("//a[contains(text(),'Continue')]")).click();
-       
-       System.out.println("Complete signup and account deletion flow executed successfully");
-       
-       // Close the browser
+// Close the browser
        driver.close();
 
 	}

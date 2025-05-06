@@ -51,14 +51,17 @@ public class ProductsPOM {
 	@FindBy (xpath="//i[@class='fa fa-arrow-circle-o-right']")
 	private WebElement emailButton;
 	
+	@FindBy (xpath="//div[contains(@class,'product-image-wrapper')]")
+	private WebElement productImage;
+	
 	
 //...........................	Constructed .....................................
 	public ProductsPOM(WebDriver driver) {
 		PageFactory.initElements(driver, this);
 	}
 	
-	public void getProductText() {
-		allProductText.isDisplayed();
+	public boolean getProductText() {
+		return allProductText.isDisplayed();
 	}
 	
 	public void addProductToCart() {
@@ -121,6 +124,8 @@ public class ProductsPOM {
 		emailButton.click();
 	}
 	
-	
+	public void productImageView() {
+		productImage.isDisplayed();
+	}
 	
 }

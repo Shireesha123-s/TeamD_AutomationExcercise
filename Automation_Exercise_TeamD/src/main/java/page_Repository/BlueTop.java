@@ -15,8 +15,8 @@ public class BlueTop {
 	@FindBy (xpath="//h2[text()='Blue Top']")
 	private WebElement blueTop;
 	
-	public void getBlueTop() {
-		blueTop.isDisplayed();
+	public boolean getBlueTop() {
+		return blueTop.isDisplayed();
 	}
 //	Quantity modification
 	@FindBy (id="quantity")

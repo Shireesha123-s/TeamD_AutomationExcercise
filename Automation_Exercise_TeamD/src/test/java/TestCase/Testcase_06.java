@@ -1,9 +1,5 @@
 package TestCase;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -11,17 +7,19 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 
-public class Testcase_06 {
-    public static void main(String[] args) throws InterruptedException, AWTException {
-// Test Data
-        String name = "Devil may cry";
-        String email = "devilmaycry@gmail.com";
-        String subject = "Test Inquiry";
-        String message = "This is a test message for contact form verification.";
-//        String filePath = "‪https://images.pexels.com/photos/276267/pexels-photo-276267.jpeg?auto=compress&cs=tinysrgb&w=600";
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
 
+import generic_Repository.BaseConfig;
+import page_Repository.ContactUsPOM;
+import page_Repository.HomePage;
+
+public class Testcase_06 extends BaseConfig{
+	@Test
+    public void main() throws InterruptedException, AWTException {
 // 1. Launch browser
-        WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
@@ -35,21 +33,24 @@ public class Testcase_06 {
         }
 
 // 4. Click on 'Contact Us' button
-        driver.findElement(By.xpath("//a[text()=' Contact us']")).click();
-        System.out.println("Clicked Contact Us");
-
+        HomePage hPage = new HomePage(driver);
+        
+        hPage.clickContactUsLink();
 // 5. Verify 'GET IN TOUCH' is visible
-        if (driver.findElement(By.xpath("//h2[text()='Get In Touch']")).isDisplayed()) {
-            System.out.println("Get In Touch visible");
+        ContactUsPOM cup=new ContactUsPOM(driver);
+        
+        if(cup.isGetInTouchHeaderVisible()) {
+        	System.out.println("Get In Touch visible");
+        }else {
+        	System.out.println("Get In Touch is not visible");
         }
-
+     
 // 6. Enter name, email, subject and message
-        driver.findElement(By.name("name")).sendKeys(name);
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("subject")).sendKeys(subject);
-        driver.findElement(By.id("message")).sendKeys(message);
-        System.out.println("Entered contact details");
-
+        cup.enterName("Devil may cry");
+        cup.enterEmail("devilmaycry@gmail.com");
+        cup.enterSubject("Test Inquiry");
+        cup.enterMessage("This is a test message for contact form verification.");
+     
 // 7. Upload file
         
         StringSelection filePathSelection = new StringSelection("D:\\Uttam's\\Documents\\Steps to download Apache POI.txt");
@@ -76,7 +77,7 @@ public class Testcase_06 {
         System.out.println("File uploaded");
 
 // 8. Click Submit button
-        driver.findElement(By.xpath("//input[@type='submit']")).click();
+        cup.clickSubmit();
         System.out.println("Submitted form");
 
 //// 9. Handle alert
@@ -84,16 +85,18 @@ public class Testcase_06 {
         System.out.println("Accepted alert");
 
 // 10. Verify success message 'Success! Your details have been submitted successfully.' is visible
-        String successText = driver.findElement(By.cssSelector(".status.alert-success")).getText();
-        if (successText.contains("Success! Your details have been submitted successfully.")) {
-            System.out.println("Success message verified");
-        }
-
+        if(cup.isSuccessMessageDisplayed()) {
+        	System.out.println("Success message verified");
+        }else {
+        	System.out.println("Success message not verified");
+		}
 // 11. Click 'Home' button and verify that landed to home page successfully
-        driver.findElement(By.cssSelector(".btn-success")).click();
+        hPage.clickHomeLink();
         if (driver.getTitle().equals("Automation Exercise")) {
             System.out.println("Returned to home page");
-        }
+        }else {
+			System.out.println("Did not return to homepage");
+		}
 
 // Close browser
         driver.close();

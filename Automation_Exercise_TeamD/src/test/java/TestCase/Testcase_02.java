@@ -1,19 +1,18 @@
 package TestCase;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 
-public class Testcase_02 {
+import org.testng.annotations.Test;
 
-    public static void main(String[] args) {
-        // Test data
-        String email = "sfspalalala@gmail.com";
-        String password = "";
-        
+import generic_Repository.BaseConfig;
+import page_Repository.AutomationExerciseLoginPOM;
+import page_Repository.DeleteAccountPOM;
+import page_Repository.HomePage;
+
+public class Testcase_02 extends BaseConfig{
+	@Test
+    public void main() {
 // 1. Launch browser
-        WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         
@@ -26,32 +25,45 @@ public class Testcase_02 {
         }
         
 // 4. Click on 'Signup / Login' button
-        driver.findElement(By.linkText("Signup / Login")).click();
+        HomePage hPage = new HomePage(driver);
+        
+        hPage.clickSignupLoginLink();
         
 // 5. Verify 'Login to your account' is visible
-        if (driver.findElement(By.xpath("//h2[contains(.,'Login to your account')]")).isDisplayed()) {
-            System.out.println("Login section is visible");
+        AutomationExerciseLoginPOM automationLogin = new AutomationExerciseLoginPOM(driver);
+        
+        if(automationLogin.isLoginSectionDisplayed()) {
+        	System.out.println("Login section is visible");
+        }else {
+        	System.out.println("Login section is not visible");
         }
         
 // 6. Enter correct email address and password
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("password")).sendKeys(password);
+        automationLogin.enterLoginEmail("supermanofPunee@gmail.com");
+        automationLogin.enterLoginPassword("1234567890");
         
 // 7. Click 'login' button
-        driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
+        automationLogin.clickLoginButton();
         
 // 8. Verify that 'Logged in as username' is visible
-        if (driver.findElement(By.partialLinkText("Logged in as")).isDisplayed()) {
-            System.out.println("Login successful");
+        if(hPage.isLoggedInAsUser()) {
+        	System.out.println("'Logged in as username' is visible");
+        }else {
+        	 System.out.println("'Logged in as username' is not visible");
+             driver.quit();
         }
-        
 // 9. Click 'Delete Account' button
-        driver.findElement(By.linkText("Delete Account")).click();
+        hPage.clickOnDeleteAccount();
         
 // 10. Verify that 'ACCOUNT DELETED!' is visible
-        if (driver.findElement(By.xpath("//h2[contains(.,'Account Deleted!')]")).isDisplayed()) {
-            System.out.println("Account deleted successfully");
-        }
+        DeleteAccountPOM deleteAP = new DeleteAccountPOM(driver);
+        
+        if(deleteAP.verifyAccountDeletion()) {
+        	System.out.println("'ACCOUNT DELETED!' is visible");
+        } else {
+        	System.out.println("'ACCOUNT DELETED!' is not visible");
+            driver.quit();
+		}
         
 // Close browser
         driver.close();

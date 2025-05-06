@@ -1,14 +1,17 @@
 package TestCase;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 
-public class Testcase_03 {
-    public static void main(String[] args) {
+import org.testng.annotations.Test;
+
+import generic_Repository.BaseConfig;
+import page_Repository.AutomationExerciseLoginPOM;
+import page_Repository.HomePage;
+
+public class Testcase_03 extends BaseConfig{
+	@Test
+    public static void main() {
 // 1. Launch browser
-        WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
@@ -22,26 +25,32 @@ public class Testcase_03 {
         }
 
 // 4. Click on 'Signup / Login' button
-        driver.findElement(By.xpath("//a[contains(text(),'Signup / Login')]")).click();
-
+        HomePage hPage = new HomePage(driver);
+        
+        hPage.clickSignupLoginLink();
 // 5. Verify 'Login to your account' is visible
-        if (driver.findElement(By.xpath("//h2[contains(text(),'Login to your account')]")).isDisplayed()) {
-            System.out.println("Login section is visible");
+        AutomationExerciseLoginPOM automationLogin = new AutomationExerciseLoginPOM(driver);
+        
+        if(automationLogin.isLoginSectionDisplayed()) {
+        	System.out.println("Login section is visible");
+        }else {
+        	System.out.println("Login section is not visible");
         }
 
 // 6. Enter incorrect email and password
-        driver.findElement(By.name("email")).sendKeys("wrong@example.com");
-        driver.findElement(By.name("password")).sendKeys("wrongpassword");
-
+        automationLogin.enterLoginEmail("supermanof@gmail.com");
+        automationLogin.enterLoginPassword("123456789xyz");
+        
 // 7. Click 'login' button
-        driver.findElement(By.xpath("//button[contains(text(),'Login')]")).click();
+        automationLogin.clickLoginButton();
 
 // 8. Verify error 'Your email or password is incorrect!' is visible
-        String errorMessage = driver.findElement(By.xpath("//p[contains(text(),'Your email or password is incorrect!')]")).getText();
-        if (errorMessage.equals("Your email or password is incorrect!")) {
-            System.out.println("Error message is visible: " + errorMessage);
+        if(automationLogin.isInvalidLoginErrorDisplayed()) {
+        	System.out.println("Your email or password is incorrect: as expected");
+        }else {
+        	System.out.println("Your email or password is correct: which is not expected");
         }
-
+        
 // Close browser
         driver.close();
     }
